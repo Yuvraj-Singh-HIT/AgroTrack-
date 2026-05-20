@@ -1,0 +1,12 @@
+{
+  "name": "agrotrack-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 9002",
+    "build": "next build",
+    "start": "next start -p 9002",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  }
+}

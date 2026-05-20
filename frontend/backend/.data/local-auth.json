@@ -1,0 +1,28 @@
+{
+  "auth_users": {
+    "debnil@gmail.com": {
+      "email": "debnil@gmail.com",
+      "passwordHash": "$2b$10$LVL0C/6J5B2HqYW7qPg7uO4pAg1qWyKEkod4arIA5zW6r4azOcJs6",
+      "createdAt": "2026-05-20T13:50:57.484Z",
+      "updatedAt": "2026-05-20T13:50:57.484Z"
+    }
+  },
+  "users": {
+    "debnil@gmail.com": {
+      "email": "debnil@gmail.com",
+      "name": "Debnil pal",
+      "role": "farmer",
+      "provider": "credentials",
+      "createdAt": "2026-05-20T13:50:57.515Z",
+      "updatedAt": "2026-05-20T13:50:58.966Z"
+    },
+    "red.devil.01x@gmail.com": {
+      "email": "red.devil.01x@gmail.com",
+      "name": "Red Devil",
+      "role": "farmer",
+      "provider": "google",
+      "createdAt": "2026-05-20T13:52:34.529Z",
+      "updatedAt": "2026-05-20T13:52:34.529Z"
+    }
+  }
+}

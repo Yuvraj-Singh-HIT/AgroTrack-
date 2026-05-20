@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function email() {
+      return request.auth.token.email;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.role == 'admin';
+    }
+
+    function isOwner(ownerEmail) {
+      return isSignedIn() && email() == ownerEmail;
+    }
+
+    // Credential hashes — server-only (Admin SDK)
+    match /auth_users/{docId} {
+      allow read, write: if false;
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && (email() == userId || isAdmin());
+      allow create: if isSignedIn() && email() == userId;
+      allow update: if isSignedIn() && (email() == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    match /reports/{reportId} {
+      allow read: if isSignedIn() && (resource.data.ownerEmail == email() || isAdmin());
+      allow create: if isSignedIn() && request.resource.data.ownerEmail == email();
+      allow update, delete: if isSignedIn() && (resource.data.ownerEmail == email() || isAdmin());
+    }
+
+    match /marketplaceListings/{listingId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.ownerEmail == email();
+      allow update, delete: if isSignedIn() && (resource.data.ownerEmail == email() || isAdmin());
+    }
+
+    match /farmProfiles/{profileId} {
+      allow read, write: if isSignedIn() && (email() == profileId || isAdmin());
+    }
+
+    match /farmPassports/{passportId} {
+      allow read: if isSignedIn() && (resource.data.ownerEmail == email() || isAdmin());
+      allow create: if isSignedIn() && request.resource.data.ownerEmail == email();
+      allow update, delete: if isSignedIn() && (resource.data.ownerEmail == email() || isAdmin());
+    }
+
+    match /sensorData/{docId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    match /weatherCache/{cacheKey} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
