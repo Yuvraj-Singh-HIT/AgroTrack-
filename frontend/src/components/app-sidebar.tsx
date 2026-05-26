@@ -48,8 +48,8 @@ const navItems = [
   { href: '/marketplace', icon: Store, labelKey: 'marketplace', emoji: '🛒' },
   { href: '/plant-doctor', icon: Stethoscope, labelKey: 'plantDoctor', emoji: '🩺' },
   { href: '/soil-analysis', icon: FlaskConical, labelKey: 'soilAnalysis', emoji: '🧪' },
-  { href: '/climate-map', icon: Map, labelKey: 'climateMap', emoji: '🗺️' },
-  { href: '/farm-passport', icon: FileText, labelKey: 'farmPassport', emoji: '🪪' },
+  { href: '/climate-risk-map', icon: Map, labelKey: 'Climate Risk Map', emoji: '🗺️' },
+  { href: '/farm-passport', icon: FileText, labelKey: 'Farm Passport', emoji: '🪪' },
   { href: '/irrigation', icon: Droplets, labelKey: 'irrigation', emoji: '💧' },
   { href: '/crop-management', icon: Sprout, labelKey: 'cropManagement', emoji: '🌱' },
   { href: '/equipment', icon: Tractor, labelKey: 'equipment', emoji: '🚜' },
@@ -67,11 +67,11 @@ export default function AppSidebar() {
 
   const translatedNavItems = useMemo(() => {
     return navItems.map(item => ({
-        ...item,
-        label: t('sidebar')[item.labelKey as NavItemLabelKey] || item.labelKey,
+      ...item,
+      label: t('sidebar')[item.labelKey as NavItemLabelKey] || item.labelKey,
     }));
   }, [t]);
-  
+
   // Memoize active path check for performance
   const isActivePath = useMemo(() => {
     return (href: string) => {
@@ -127,8 +127,8 @@ export default function AppSidebar() {
             href={item.href}
             className={cn(
               'relative px-3 py-2 rounded-md transition-all flex items-center gap-2 min-w-fit',
-              active 
-                ? 'bg-accent text-accent-foreground font-semibold' 
+              active
+                ? 'bg-accent text-accent-foreground font-semibold'
                 : 'text-foreground/70 hover:bg-accent/50 hover:text-accent-foreground'
             )}
             aria-current={active ? 'page' : undefined}
@@ -136,8 +136,8 @@ export default function AppSidebar() {
             <span role="img" aria-label={item.label} suppressHydrationWarning>{item.emoji}</span>
             <span className="whitespace-nowrap">{item.label}</span>
             {active && (
-              <span 
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-primary rounded-full" 
+              <span
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-primary rounded-full"
                 aria-hidden="true"
               />
             )}
@@ -162,8 +162,8 @@ export default function AppSidebar() {
           <div className="md:hidden flex items-center gap-2">
             <Sheet>
               <SheetTrigger asChild>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="icon"
                   className="h-9 w-9"
                   aria-label="Open menu"
@@ -173,8 +173,8 @@ export default function AppSidebar() {
               </SheetTrigger>
               <SheetContent side="left" className="w-64 p-0 flex flex-col">
                 <SheetHeader className="border-b p-4">
-                   <SheetTitle className="sr-only">Main Menu</SheetTitle>
-                   <Link href="/dashboard" aria-label="Go to dashboard">
+                  <SheetTitle className="sr-only">Main Menu</SheetTitle>
+                  <Link href="/dashboard" aria-label="Go to dashboard">
                     <Logo className="flex items-center gap-2" />
                   </Link>
                 </SheetHeader>
@@ -183,7 +183,7 @@ export default function AppSidebar() {
                 </div>
               </SheetContent>
             </Sheet>
-            
+
             {/* Mobile Logo */}
             <Link href="/dashboard" className="flex items-center" aria-label="Go to dashboard">
               <Logo className="flex items-center gap-2" />
@@ -224,7 +224,7 @@ export default function AppSidebar() {
                 </Button>
               )
             )}
-            
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -238,9 +238,9 @@ export default function AppSidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-40" align="end">
                 {languages.map((lang) => (
-                    <DropdownMenuItem key={lang.code} onSelect={() => setLanguage(lang.code as any)}>
-                      {lang.name}
-                    </DropdownMenuItem>
+                  <DropdownMenuItem key={lang.code} onSelect={() => setLanguage(lang.code as any)}>
+                    {lang.name}
+                  </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>

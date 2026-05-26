@@ -4,6 +4,8 @@
 import { FieldValue } from "firebase-admin/firestore";
 import { randomUUID } from "node:crypto";
 import { db } from "../../firebase/server";
+import { shouldUseLocalAuthStore } from "../../firebase/server";
+import * as local from "./localPassportStore";
 
 const COLLECTION = "farmPassports";
 
@@ -21,6 +23,10 @@ export async function createFarmPassport(input: {
   harvestDate: string;
   initialHistory?: { action: string; description: string }[];
 }): Promise<string> {
+  if (shouldUseLocalAuthStore()) {
+    return local.localCreateFarmPassport(input);
+  }
+
   const passportId = randomUUID();
   const ownerEmail = input.ownerEmail.trim().toLowerCase();
   const now = new Date().toISOString();
@@ -51,6 +57,10 @@ export async function appendPassportHistory(
   ownerEmail: string,
   entry: { action: string; description: string }
 ): Promise<void> {
+  if (shouldUseLocalAuthStore()) {
+    return local.localAppendPassportHistory(passportId, ownerEmail, entry);
+  }
+
   const ref = db.collection(COLLECTION).doc(passportId);
   const snap = await ref.get();
   if (!snap.exists) throw new Error("Passport not found");
@@ -74,6 +84,10 @@ export async function appendPassportHistory(
 }
 
 export async function listPassportsForOwner(ownerEmail: string): Promise<Record<string, unknown>[]> {
+  if (shouldUseLocalAuthStore()) {
+    return local.localListPassportsForOwner(ownerEmail);
+  }
+
   const email = ownerEmail.trim().toLowerCase();
   const qs = await db.collection(COLLECTION).where("ownerEmail", "==", email).get();
   return qs.docs.map((d) => d.data() as Record<string, unknown>);

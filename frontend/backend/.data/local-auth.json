@@ -23,6 +23,14 @@
       "provider": "google",
       "createdAt": "2026-05-20T13:52:34.529Z",
       "updatedAt": "2026-05-20T13:52:34.529Z"
+    },
+    "yuvrajseptember@gmail.com": {
+      "email": "yuvrajseptember@gmail.com",
+      "name": "Yuvraj Singh",
+      "role": "farmer",
+      "provider": "google",
+      "createdAt": "2026-05-25T15:06:11.341Z",
+      "updatedAt": "2026-05-25T15:06:11.341Z"
     }
   }
 }

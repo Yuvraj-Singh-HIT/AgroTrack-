@@ -1,23 +1,45 @@
 'use client';
 
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import { FarmScene } from './3d/FarmScene';
 import { SoilScanner } from './3d/SoilScanner';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 export function Hero3D() {
-  const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
   const [activeScene, setActiveScene] = useState<'farm' | 'scanner'>('farm');
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const { scrollYProgress } = useScroll();
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Parallax effects
+  // Mouse Parallax Motion Values
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth springs for parallax
+  const springConfig = { damping: 25, stiffness: 150 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+
+  // Parallax Multipliers (Background moves slow, foreground moves fast)
+  // Negative means moving opposite to mouse
+  const bgX = useTransform(smoothMouseX, [-1, 1], [-20, 20]);
+  const bgY = useTransform(smoothMouseY, [-1, 1], [-20, 20]);
+
+  const midX = useTransform(smoothMouseX, [-1, 1], [-40, 40]);
+  const midY = useTransform(smoothMouseY, [-1, 1], [-40, 40]);
+
+  const fgX = useTransform(smoothMouseX, [-1, 1], [-80, 80]);
+  const fgY = useTransform(smoothMouseY, [-1, 1], [-80, 80]);
+
+  const mouseFollowLeft = useTransform(smoothMouseX, [-1, 1], ['0%', '100%']);
+  const mouseFollowTop = useTransform(smoothMouseY, [-1, 1], ['0%', '100%']);
+
+  // Scroll Parallax effects (for when user scrolls down)
   const scale = useTransform(scrollYProgress, [0, 0.1], [1, 1.1]);
-  const opacity = useTransform(scrollYProgress, [0, 0.1], [1, 0.9]);
-  const y = useTransform(scrollYProgress, [0, 0.3], [0, 50]);
+  const opacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 0.3], [0, 150]);
 
   useEffect(() => {
     setIsClient(true);
@@ -27,25 +49,30 @@ export function Hero3D() {
     if (!isClient) return;
     
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight
-      });
+      // Normalize mouse position to [-1, 1] relative to screen center
+      const normalizedX = (e.clientX / window.innerWidth) * 2 - 1;
+      const normalizedY = (e.clientY / window.innerHeight) * 2 - 1;
+      mouseX.set(normalizedX);
+      mouseY.set(normalizedY);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isClient]);
+  }, [isClient, mouseX, mouseY]);
 
   return (
-    <section 
+    <motion.section 
       ref={containerRef} 
+      style={{ opacity, scale, y }}
       className="relative w-full h-screen overflow-hidden bg-gradient-to-b from-gray-950 via-black to-gray-950"
     >
-      {/* Background Effects */}
-      <div className="absolute inset-0 z-0">
+      {/* Background Effects (Deep Parallax) */}
+      <motion.div 
+        className="absolute inset-0 z-0 scale-[1.1]" 
+        style={{ x: bgX, y: bgY }}
+      >
         <motion.div 
-          className="absolute inset-0 bg-gradient-to-br from-emerald-900/20 via-black/40 to-cyan-900/20"
+          className="absolute inset-0 bg-gradient-to-br from-emerald-900/30 via-black/50 to-cyan-900/30"
           animate={{
             backgroundPosition: ['0% 0%', '100% 100%'],
           }}
@@ -56,7 +83,7 @@ export function Hero3D() {
             ease: "linear"
           }}
         />
-      </div>
+      </motion.div>
 
       {/* Scene Toggle Button */}
       <motion.button
@@ -81,78 +108,80 @@ export function Hero3D() {
         <span>{activeScene === 'farm' ? 'View Soil Scanner' : 'View Farm Scene'}</span>
       </motion.button>
 
-      {/* Farm Scene */}
-      <motion.div 
-        className="absolute inset-0 z-10"
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ 
-          opacity: activeScene === 'farm' ? 1 : 0, 
-          scale: activeScene === 'farm' ? 1 : 0.98,
-          pointerEvents: activeScene === 'farm' ? 'auto' : 'none',
-          transition: { duration: 0.5 }
-        }}
-      >
-        <FarmScene className="w-full h-full" />
-        
-        {/* Animated sun */}
-        <motion.div
-          className="absolute top-20 right-20 text-6xl"
-          animate={{
-            rotate: 360,
-            scale: [1, 1.1, 1]
-          }}
-          transition={{
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-            scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+      {/* Midground 3D Scenes (Medium Parallax) */}
+      <motion.div className="absolute inset-0 z-10 scale-[1.05]" style={{ x: midX, y: midY }}>
+        {/* Farm Scene */}
+        <motion.div 
+          className="absolute inset-0"
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ 
+            opacity: activeScene === 'farm' ? 1 : 0, 
+            scale: activeScene === 'farm' ? 1 : 0.98,
+            pointerEvents: activeScene === 'farm' ? 'auto' : 'none',
+            transition: { duration: 0.5 }
           }}
         >
-          ☀️
+          <FarmScene className="w-full h-full" />
+          
+          {/* Animated sun */}
+          <motion.div
+            className="absolute top-20 right-20 text-6xl"
+            animate={{
+              rotate: 360,
+              scale: [1, 1.1, 1]
+            }}
+            transition={{
+              rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+              scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+            }}
+          >
+            ☀️
+          </motion.div>
+        </motion.div>
+
+        {/* Soil Scanner Scene */}
+        <motion.div 
+          className="absolute inset-0"
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ 
+            opacity: activeScene === 'scanner' ? 1 : 0, 
+            scale: activeScene === 'scanner' ? 1 : 0.98,
+            pointerEvents: activeScene === 'scanner' ? 'auto' : 'none',
+            transition: { duration: 0.5 }
+          }}
+        >
+          <SoilScanner className="w-full h-full" />
+          
+          {/* Scanner wave effect */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle at center, rgba(0,230,118,0.15) 0%, transparent 70%)',
+              transform: 'translateZ(0)'
+            }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{
+              scale: [0.8, 1.5],
+              opacity: [0, 0.2, 0],
+            }}
+          />
         </motion.div>
       </motion.div>
 
-      {/* Soil Scanner Scene */}
-      <motion.div 
-        className="absolute inset-0 z-10"
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ 
-          opacity: activeScene === 'scanner' ? 1 : 0, 
-          scale: activeScene === 'scanner' ? 1 : 0.98,
-          pointerEvents: activeScene === 'scanner' ? 'auto' : 'none',
-          transition: { duration: 0.5 }
-        }}
-      >
-        <SoilScanner className="w-full h-full" />
-        
-        {/* Scanner wave effect */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle at center, rgba(0,230,118,0.15) 0%, transparent 70%)',
-            transform: 'translateZ(0)'
-          }}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{
-            scale: [0.8, 1.5],
-            opacity: [0, 0.2, 0],
-          }}
-        />
-      </motion.div>
-
-      {/* Mouse Follow Effect */}
+      {/* Mouse Follow Effect (Independent) */}
       {isClient && (
         <motion.div
-          className="absolute w-[300px] h-[300px] rounded-full pointer-events-none z-10"
+          className="absolute w-[400px] h-[400px] rounded-full pointer-events-none z-20"
           style={{
-            background: 'radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%)',
-            left: `${mousePosition.x * 100}%`,
-            top: `${mousePosition.y * 100}%`,
+            background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)',
+            left: mouseFollowLeft,
+            top: mouseFollowTop,
             x: '-50%',
             y: '-50%',
-            position: 'absolute',
           }}
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.3, 0.6, 0.3],
           }}
           transition={{
             duration: 3,
@@ -163,12 +192,15 @@ export function Hero3D() {
       )}
 
       {/* Content Overlay */}
-      <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/60 via-transparent to-black/40" />
+      <div className="absolute inset-0 z-20 bg-gradient-to-t from-gray-950 via-transparent to-gray-950/40 pointer-events-none" />
 
-      {/* Main Content */}
-      <div className="relative z-30 flex flex-col items-center justify-center h-full px-4">
+      {/* Main Content (Foreground - High Parallax) */}
+      <motion.div 
+        className="relative z-30 flex flex-col items-center justify-center h-full px-4"
+        style={{ x: fgX, y: fgY }}
+      >
         <motion.h1 
-          className="text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 text-center"
+          className="text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 text-center drop-shadow-2xl"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
@@ -179,7 +211,7 @@ export function Hero3D() {
         </motion.h1>
 
         <motion.p 
-          className="text-xl md:text-2xl text-gray-300 font-light tracking-wider mb-12 text-center max-w-2xl"
+          className="text-xl md:text-2xl text-gray-300 font-light tracking-wider mb-12 text-center max-w-2xl drop-shadow-lg"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 1 }}
@@ -224,7 +256,7 @@ export function Hero3D() {
             </motion.svg>
           </motion.button>
         </motion.div>
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 }

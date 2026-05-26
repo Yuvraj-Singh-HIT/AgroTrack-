@@ -10,7 +10,7 @@
 import { z } from 'zod';
 import { ai } from '../genkit';
 import { AiExplainabilitySchema } from '../schemas/explainability';
-import { fetchForecastBundleCached } from '../../services/weather/weatherService';
+import { fetchForecastBundleCached, geocodeRegion } from '../../services/weather/weatherService';
 import type { OpenMeteoForecastBundle } from '../../services/weather/weatherTypes';
 
 const ClimateRiskForecastInputSchema = z.object({
@@ -42,6 +42,12 @@ const ClimateRiskForecastOutputSchema = z.object({
   extremeWeatherRisk: z.string().describe('The risk of extreme weather events.'),
   sustainabilityAnalysis: z.string().describe('A detailed analysis of which crops are suitable for the climate and required soil types or management techniques.'),
   weatherAlerts: z.array(WeatherAlertSchema).optional().describe('A list of active weather alerts for the region.'),
+  droughtRiskLevel: z.enum(['Low', 'Medium', 'High']).describe('Drought stress risk level.'),
+  rainfallOutlookLevel: z.enum(['Below Normal', 'Normal', 'Above Normal']).describe('Rainfall outlook level.'),
+  floodRiskLevel: z.enum(['Low', 'Medium', 'High']).describe('Flood / heavy rain risk level.'),
+  cropSuitabilityLevel: z.enum(['Low', 'Medium', 'High']).describe('Overall crop suitability level for current season/forecast period.'),
+  latitude: z.number().optional().describe('Latitude of the geocoded region.'),
+  longitude: z.number().optional().describe('Longitude of the geocoded region.'),
   explainability: AiExplainabilitySchema,
 });
 export type ClimateRiskForecastOutput = z.infer<typeof ClimateRiskForecastOutputSchema>;
@@ -66,6 +72,10 @@ const textGenerationPrompt = ai.definePrompt({
     extremeWeatherRisk: true,
     sustainabilityAnalysis: true,
     weatherAlerts: true,
+    droughtRiskLevel: true,
+    rainfallOutlookLevel: true,
+    floodRiskLevel: true,
+    cropSuitabilityLevel: true,
   })},
   prompt: `You are an AI assistant that forecasts climate risks for farmers using BOTH agronomic expertise and the supplied real-world weather statistics.
 
@@ -74,6 +84,12 @@ The weatherContext block was produced from Open-Meteo (geocoded forecast). You M
 Then provide a "Sustainability Analysis" that details which crops are suitable given the forecasted conditions, ideal soil types, and soil/water management techniques.
 
 Also synthesize plausible structured weatherAlerts (0–5 items) consistent with the metrics (e.g., drought stress if dryDays is high, flood/waterlogging risk if heavyRainDays is high, wind damage if gusts are high).
+
+Determine the specific risk levels for:
+- droughtRiskLevel: 'Low', 'Medium', or 'High' depending on whether there is high temperature and low/no rainfall forecast.
+- rainfallOutlookLevel: 'Below Normal', 'Normal', or 'Above Normal' based on total precipitation compared to typical expectations.
+- floodRiskLevel: 'Low', 'Medium', or 'High' based on whether heavy rain days or high daily precipitation peaks are present.
+- cropSuitabilityLevel: 'Low', 'Medium', or 'High' depending on how favorable the temperature and rainfall pattern is for common crops in this region.
 
 Region: {{{region}}}
 Days: {{{days}}}
@@ -111,6 +127,19 @@ const climateRiskForecastFlow = ai.defineFlow(
         throw new Error('Failed to generate the climate risk forecast. Please try again.');
     }
 
+    let latitude: number | undefined = bundle?.latitude;
+    let longitude: number | undefined = bundle?.longitude;
+
+    if (!latitude || !longitude) {
+      try {
+        const geo = await geocodeRegion(input.region);
+        latitude = geo.latitude;
+        longitude = geo.longitude;
+      } catch (geocodeErr) {
+        console.error('[climateRiskForecastFlow] geocoding fallback failed', geocodeErr);
+      }
+    }
+
     const evidence = bundle
       ? [
           bundle.summary,
@@ -122,6 +151,8 @@ const climateRiskForecastFlow = ai.defineFlow(
 
     return {
       ...output,
+      latitude,
+      longitude,
       explainability: {
         primarySource: bundle ? ('hybrid' as const) : ('gemini' as const),
         modelName: bundle
