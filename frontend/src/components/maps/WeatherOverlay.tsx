@@ -35,7 +35,7 @@ export function WeatherOverlay({ data, activeLayer }: Props) {
       opacity: z.opacity,
       color: getLayerColor(activeLayer),
     }));
-  }, [data.latitude, data.longitude, activeLayer]);
+  }, [data, activeLayer]);
 
   return (
     <>

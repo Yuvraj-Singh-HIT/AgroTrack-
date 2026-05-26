@@ -42,12 +42,7 @@ type Props = {
   activeLayer: MapLayerId;
 };
 
-const LAYER_LEGEND: Record<MapLayerId, { label: string; color: string }> = {
-  drought: { label: "Drought stress", color: "#b45309" },
-  rainfall: { label: "Rainfall outlook", color: "#2563eb" },
-  flood: { label: "Flood / heavy rain", color: "#7c3aed" },
-  suitability: { label: "Crop suitability", color: "#15803d" },
-};
+
 
 function getRiskColor(level: string | undefined, layer: MapLayerId) {
   if (!level) {
@@ -123,14 +118,7 @@ export function ClimateRiskMap({
     return getRiskColor(centerLevel, activeLayer);
   }, [centerLevel, activeLayer]);
 
-  const radius = useMemo(() => {
-    switch (activeLayer) {
-      case "drought": return 18000;
-      case "flood": return 22000;
-      case "rainfall": return 16000;
-      default: return 14000;
-    }
-  }, [activeLayer]);
+
 
   const subPoints = useMemo(() => {
     if (!latitude || !longitude) return [];
@@ -155,7 +143,7 @@ export function ClimateRiskMap({
     );
   }
 
-  const legend = LAYER_LEGEND[activeLayer];
+
 
   return (
     <div className="space-y-2">

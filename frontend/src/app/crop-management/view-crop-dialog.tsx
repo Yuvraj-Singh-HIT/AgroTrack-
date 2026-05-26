@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Calendar, MapPin, HeartPulse, GitCommitHorizontal, Wheat, Leaf } from "lucide-react";
+import { Calendar, MapPin, HeartPulse, Wheat, Leaf } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import type { Crop } from "./data";
 import { getDaysToHarvest } from "./data";

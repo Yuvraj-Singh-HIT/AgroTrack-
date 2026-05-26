@@ -1,0 +1,32 @@
+{
+  "reports": [
+    {
+      "userId": "yuvrajseptember@gmail.com",
+      "location": "Uganda",
+      "latitude": 1.25,
+      "longitude": 32.5,
+      "rainfall": 0,
+      "temperature": 23,
+      "floodRisk": 0,
+      "droughtRisk": 39,
+      "cropSuitability": 96,
+      "recommendation": "{\"cropRecommendations\":[\"Maize\",\"Beans\",\"Cassava\",\"Sweet Potatoes\"],\"farmingAdvice\":\"Focus on optimizing water usage and enhancing soil health to combat the current dry conditions. Prioritize timely planting and consider crop rotation to maintain soil fertility and break pest cycles. Regularly monitor crop growth and adjust practices based on plant health indicators.\",\"irrigationAdvice\":\"Given the 0 mm rainfall and low soil moisture (0.154 m³/m³), efficient irrigation is critical. Implement drip irrigation or other targeted watering methods to deliver water directly to the root zone and minimize evaporation. Irrigate during cooler parts of the day, such as early morning or late evening. Monitor soil moisture levels frequently to ensure adequate hydration without overwatering.\",\"riskMitigation\":[\"Implement mulching around plants to conserve soil moisture and reduce evaporation.\",\"Utilize drought-tolerant crop varieties to enhance resilience against dry spells.\",\"Adopt conservation tillage practices to improve soil structure and water infiltration.\",\"Invest in water harvesting and storage solutions for future dry periods, if possible.\",\"Regularly monitor weather forecasts and soil moisture to proactively adjust farming practices.\"],\"fertilizerSuggestions\":[\"Incorporate organic matter such as compost or well-rotted manure to improve soil water retention and nutrient availability.\",\"Apply balanced NPK fertilizers, potentially with higher potassium content, to enhance crop stress tolerance.\",\"Consider foliar feeding during critical growth stages to provide nutrients efficiently, especially if soil moisture is a limiting factor for root uptake.\",\"Conduct soil testing to determine specific nutrient deficiencies and tailor fertilizer applications accordingly.\"],\"expectedYieldInsights\":\"With a high crop suitability index of 96, there is strong potential for good yields, provided that the moderate drought risk (39) is effectively managed through diligent irrigation and water conservation strategies. Yields for drought-tolerant crops are expected to be robust, while more water-sensitive crops will require precise water management to achieve optimal results. Without proper irrigation, yields could be significantly impacted.\"}",
+      "timestamp": "2026-05-26T18:37:53.482Z",
+      "id": "local_risk_1779820673482_ptu1nsi"
+    },
+    {
+      "userId": "yuvrajseptember@gmail.com",
+      "location": "Kolkata",
+      "latitude": 22.56263,
+      "longitude": 88.36304,
+      "rainfall": 0,
+      "temperature": 29.6,
+      "floodRisk": 0,
+      "droughtRisk": 49,
+      "cropSuitability": 82,
+      "recommendation": "{\"cropRecommendations\":[\"Mung Bean (Vigna radiata)\",\"Black Gram (Vigna mungo)\",\"Maize (Zea mays)\",\"Okra (Abelmoschus esculentus)\"],\"farmingAdvice\":\"Focus on improving soil organic matter content to enhance water retention capacity. Implement timely sowing practices to align with crop-specific growth cycles and available water. Regularly monitor crop health for early signs of pest or disease infestation, particularly in humid conditions, and apply integrated pest management strategies. Consider crop rotation with legumes to improve soil fertility and break pest cycles.\",\"irrigationAdvice\":\"Given the low soil moisture (0.098 m³/m³) and current absence of rainfall, regular and targeted irrigation is critical. Utilize efficient irrigation methods such as drip irrigation or micro-sprinklers to maximize water delivery to the root zone and minimize evaporation. Irrigate early in the morning or late in the evening to reduce water loss. Monitor soil moisture levels frequently and adjust irrigation schedules based on crop water requirements and observed soil conditions, aiming to keep the root zone adequately moist but not waterlogged.\",\"riskMitigation\":[\"Implement mulching (organic or plastic) around plants to conserve soil moisture and reduce evaporation.\",\"Prioritize the use of drought-tolerant crop varieties suitable for the region.\",\"Invest in reliable irrigation infrastructure to ensure consistent water supply, especially during dry spells.\",\"Practice rainwater harvesting and storage if possible, to supplement irrigation water during non-monsoon periods.\",\"Regularly monitor soil moisture using tensiometers or moisture sensors to optimize irrigation timing and volume.\"],\"fertilizerSuggestions\":[\"Conduct a soil test to determine precise nutrient deficiencies and adjust fertilizer application accordingly.\",\"Incorporate organic matter such as well-decomposed farmyard manure or compost to improve soil structure, water holding capacity, and nutrient availability.\",\"For general growth, consider a balanced NPK fertilizer application (e.g., 10-26-26 or 12-32-16) at planting, followed by nitrogen top-dressing (e.g., Urea) as per crop growth stage.\",\"Consider micronutrient supplementation, especially if soil tests indicate deficiencies, as these are crucial for crop resilience against stress.\"],\"expectedYieldInsights\":\"With a high Crop Suitability Index of 82, there is significant potential for good yields. However, the current drought risk and low soil moisture present a critical challenge. Achieving moderate to high yields will be heavily dependent on the effectiveness and consistency of irrigation management. Any lapse in water supply due to the drought risk could significantly reduce the expected harvest. Effective risk mitigation strategies and precise water management are key to realizing the full yield potential.\"}",
+      "timestamp": "2026-05-26T18:40:00.091Z",
+      "id": "local_risk_1779820800091_8zu0ypj"
+    }
+  ]
+}

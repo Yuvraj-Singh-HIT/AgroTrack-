@@ -37,6 +37,7 @@ const languages = [
 interface LanguageContextType {
   language: Language;
   setLanguage: (language: Language) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   t: (key: string) => any;
   languages: typeof languages;
 }
@@ -62,8 +63,10 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const t = useCallback((key: string): any => {
     const keys = key.split('.');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let current: any = translations[language];
 
     for (const k of keys) {

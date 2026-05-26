@@ -59,7 +59,7 @@ export function HeatmapLayer({ data, activeLayer }: Props) {
     }
 
     return result;
-  }, [data.latitude, data.longitude, activeLayer, data.risks, data.weather]);
+  }, [data, activeLayer]);
 
   return (
     <>

@@ -27,7 +27,6 @@ const TileLayer = dynamic(
 const MapController = dynamic(
   () =>
     import("react-leaflet").then((mod) => {
-      const { useEffect: useEff } = require("react");
       return function Controller({
         center,
         zoom,
@@ -36,9 +35,10 @@ const MapController = dynamic(
         zoom: number;
       }) {
         const map = mod.useMap();
-        useEff(() => {
-          map.flyTo(center, zoom, { duration: 1.5 });
-        }, [center[0], center[1], zoom, map]);
+        const [lat, lng] = center;
+        useEffect(() => {
+          map.flyTo([lat, lng], zoom, { duration: 1.5 });
+        }, [lat, lng, zoom, map]);
         return null;
       };
     }),

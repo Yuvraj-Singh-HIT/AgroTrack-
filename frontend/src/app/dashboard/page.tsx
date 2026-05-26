@@ -153,7 +153,7 @@ const DashboardPage: React.FC = () => {
 
   const { data: reportsData, isLoading: areReportsLoading, error: reportsError } =
     useOwnerReports(ownerEmail);
-  const reports = reportsData || [];
+  const reports = useMemo(() => reportsData || [], [reportsData]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<string>('all');
 
@@ -214,18 +214,6 @@ const DashboardPage: React.FC = () => {
         variant: "destructive",
       });
     }
-  };
-
-  const formatDate = (timestamp: any) => {
-    if (!timestamp || !timestamp.toDate) {
-      return 'Just now';
-    }
-    const date = timestamp.toDate();
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
   };
 
   return (

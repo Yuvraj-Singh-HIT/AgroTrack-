@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { FarmScene } from './3d/FarmScene';
 import { SoilScanner } from './3d/SoilScanner';
 import { useState, useEffect, useRef } from 'react';

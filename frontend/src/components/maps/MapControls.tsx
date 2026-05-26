@@ -26,7 +26,6 @@ import {
   TreePine,
   Thermometer,
   Flame,
-  Layers,
 } from "lucide-react";
 import type { ActiveLayerId } from "./RiskLegend";
 
@@ -65,6 +64,7 @@ export function MapControls({
   isLoading,
   hasData,
 }: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const layersList: { id: ActiveLayerId; label: string; icon: any; color: string }[] = [
     { id: "rainfall", label: "Rainfall", icon: CloudRain, color: "text-blue-500" },
     { id: "drought", label: "Drought", icon: Droplets, color: "text-amber-600" },

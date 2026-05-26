@@ -28,8 +28,7 @@ export function CropZoneLayer({ data }: Props) {
 
   const zones = useMemo(() => {
     // Create multiple crop zone polygons (approximated with circles)
-    const baseColor =
-      suitability > 70 ? "#16a34a" : suitability > 40 ? "#ca8a04" : "#dc2626";
+
 
     return [
       { name: "Primary Arable Zone", latOff: 0, lngOff: 0, r: 28, scoreMod: 0 },

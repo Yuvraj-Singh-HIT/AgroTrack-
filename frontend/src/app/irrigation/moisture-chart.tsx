@@ -49,6 +49,7 @@ export function MoistureChart({ moistureHistory, zones }: MoistureChartProps) {
 
   const chartData = useMemo(() => {
     return moistureHistory.map((historyPoint) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const dataPoint: Record<string, any> = { day: historyPoint.day };
       zones.forEach((zone) => {
         const zoneKey = `zone_${zone.id}`;

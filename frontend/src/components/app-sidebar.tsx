@@ -39,7 +39,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { useLanguage } from '@/context/language-context';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, labelKey: 'dashboard', emoji: '📊' },
@@ -237,11 +237,15 @@ export default function AppSidebar() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-40" align="end">
-                {languages.map((lang) => (
-                  <DropdownMenuItem key={lang.code} onSelect={() => setLanguage(lang.code as any)}>
-                    {lang.name}
-                  </DropdownMenuItem>
-                ))}
+                {languages.map((lang) => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const code = lang.code as any;
+                  return (
+                    <DropdownMenuItem key={lang.code} onSelect={() => setLanguage(code)}>
+                      {lang.name}
+                    </DropdownMenuItem>
+                  );
+                })}
               </DropdownMenuContent>
             </DropdownMenu>
 

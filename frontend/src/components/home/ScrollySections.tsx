@@ -31,6 +31,7 @@ export function ScrollySections() {
   
   // Transform horizontal scroll for feature cards
   const xTransform = useTransform(solutionProgress, [0, 1], ["0%", "-66%"]);
+  const progressWidth = useTransform(solutionProgress, [0, 1], ["0%", "100%"]);
 
   return (
     <div ref={containerRef} className="relative bg-gray-950 text-white overflow-hidden">
@@ -137,8 +138,8 @@ export function ScrollySections() {
                     <motion.div 
                       className="h-full bg-current"
                       style={{ 
-                        width: useTransform(solutionProgress, [0, 1], ["0%", "100%"]),
-                        color: feature.icon.props.className.match(/text-(\w+)-400/)[0] 
+                        width: progressWidth,
+                        color: feature.icon.props.className.match(/text-(\w+)-400/)?.[0] || 'inherit'
                       }}
                     />
                   </div>

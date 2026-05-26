@@ -32,11 +32,9 @@ import {
   Lock,
   CloudSun,
   Droplets,
-  Wind,
   TreePine,
   ShieldAlert,
 } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const LAYERS: { id: MapLayerId; label: string }[] = [
   { id: "drought", label: "Drought" },
@@ -47,6 +45,7 @@ const LAYERS: { id: MapLayerId; label: string }[] = [
 
 type FormState = {
   message: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any | null;
   errors?: {
     region?: string[];
@@ -248,6 +247,7 @@ export default function ClimateMapPage() {
                           <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">
                             Active Weather Alerts
                           </span>
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                           {state.data.weatherAlerts.map((alert: any, idx: number) => (
                             <div key={idx} className="text-xs bg-muted p-2 rounded">
                               <p className="font-semibold text-destructive">{alert.alertTitle}</p>

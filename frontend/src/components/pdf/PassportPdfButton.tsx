@@ -1,6 +1,6 @@
 "use client";
 
-import { pdf, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { pdf, Document, Page, Text, StyleSheet } from "@react-pdf/renderer";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 

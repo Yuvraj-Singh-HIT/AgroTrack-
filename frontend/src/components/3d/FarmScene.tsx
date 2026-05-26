@@ -131,7 +131,7 @@ export function FarmScene({ className = '' }: FarmSceneProps) {
       const time = (Date.now() - startTime) * 0.001;
       
       // Animate droplets
-      droplets.forEach((droplet, index) => {
+      droplets.forEach((droplet) => {
         droplet.mesh.position.y = droplet.startY + Math.sin(time * droplet.speed + droplet.offset) * 2;
         droplet.mesh.rotation.x += 0.01;
         droplet.mesh.rotation.y += 0.01;
@@ -142,7 +142,7 @@ export function FarmScene({ className = '' }: FarmSceneProps) {
       });
       
       // Animate crops
-      crops.forEach((crop, index) => {
+      crops.forEach((crop) => {
         crop.scale.y = 1 + Math.sin(time * 0.5 + crop.position.x) * 0.3;
       });
       
@@ -172,8 +172,8 @@ export function FarmScene({ className = '' }: FarmSceneProps) {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
+      if (container) {
+        container.removeChild(renderer.domElement);
       }
     };
   }, []);

@@ -1,7 +1,6 @@
 
 'use client';
 
-import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -15,10 +14,9 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Biohazard, Bug, Droplets, Download, Map, Wind, Siren, TreePine } from "lucide-react";
+import { Biohazard, Bug, Droplets, Download, Wind, Siren, TreePine } from "lucide-react";
 import type { ClimateRiskForecastOutput } from "@/ai/flows/climate-risk-forecast";
 import { WeatherAlerts } from "./weather-alerts";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useToast } from "@/hooks/use-toast";
 import { useFirebase } from "@/firebase";
 import { createReport, type CreateReportData } from "@/lib/reports";

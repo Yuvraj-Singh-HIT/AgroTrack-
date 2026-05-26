@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useSession, signIn } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
